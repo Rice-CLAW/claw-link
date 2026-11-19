@@ -127,14 +127,15 @@ body{margin:0}
 #claw-ui .wordmark{font-size:18px;font-weight:800;letter-spacing:-.035em}
 #claw-ui .demo{font-size:12px;color:var(--muted)}
 #claw-ui .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-#claw-ui .shell{flex:1;min-width:0}
+#claw-ui .shell{flex:1;min-width:0;padding-block-end:12px}
 #claw-ui main{
   min-width:0;
-  padding:24px var(--gutter-right) 24px var(--gutter-left);
+  padding:20px var(--gutter-right) 20px var(--gutter-left);
   background:var(--main-color);
   border-bottom:1px solid var(--line);
   border-radius:0 0 12px 12px;
 }
+#claw-ui .home-nav{display:flex;padding:10px var(--gutter-right) 0 var(--gutter-left)}
 #claw-ui .menu{display:grid;gap:8px}
 #claw-ui .menu button{min-height:48px}
 #claw-ui .menu .primary{min-height:52px}
@@ -247,18 +248,27 @@ body{margin:0}
 #claw-ui .screen-reader{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
 @media(max-width:375px){
-  #claw-ui main{padding-block:20px}
   #claw-ui .training-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
   #claw-ui .training-actions button{padding-inline:5px;font-size:13px}
-  #claw-ui .top-inner,#claw-ui .top-actions{column-gap:4px}
-  #claw-ui .top-actions button{padding-inline:5px;font-size:12px}
-  #claw-ui .theme-option .theme-label{display:none}
   #claw-ui .motion-actions{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
 }
 @media(max-width:619px){
+  #claw-ui .top-inner{column-gap:6px}
+  #claw-ui .theme-option .theme-label{display:none}
+  #claw-ui .top-actions button{padding-inline:6px;font-size:13px}
+  #claw-ui .disconnect-suffix{display:none}
+}
+@media(max-width:389px){
   :root{scroll-padding-top:7.5rem}
-  #claw-ui .top-inner{grid-template-columns:minmax(0,1fr) auto}
+  #claw-ui .top-inner{
+    grid-template-columns:minmax(0,1fr) auto;
+    row-gap:6px;
+    padding-block:max(8px,env(safe-area-inset-top)) 8px;
+  }
   #claw-ui .top-actions{grid-column:1/-1}
+}
+@media(min-width:390px) and (max-width:619px){
+  #claw-ui .theme-option .icon{display:none}
 }
 @media(max-width:440px){
   #claw-ui .brand{flex-direction:column;gap:0}
@@ -269,7 +279,8 @@ body{margin:0}
 @media(min-width:720px){
   #claw-ui{--gutter:24px}
   #claw-ui .shell{padding-inline:var(--gutter-left) var(--gutter-right)}
-  #claw-ui main{margin-block:clamp(24px,4vh,40px);padding:28px 24px;border:1px solid var(--line);border-radius:12px}
+  #claw-ui main{margin-block-start:clamp(24px,4vh,40px);padding:28px 24px;border:1px solid var(--line);border-radius:12px}
+  #claw-ui .home-nav{padding-inline:0}
   #claw-ui .heading{margin-bottom:20px}
 }
 @media(min-width:720px) and (orientation:landscape){
@@ -313,6 +324,7 @@ body{margin:0}
     <symbol id="icon-status" viewBox="0 0 24 24"><path d="M2 12h5l3-7 4 14 3-7h5"/></symbol>
     <symbol id="icon-theme" viewBox="0 0 24 24"><path d="M21 11a9 9 0 1 0-9 10 2 2 0 0 0 1.4-3.4 1.5 1.5 0 0 1 1.1-2.6h2A4.5 4.5 0 0 0 21 11zM7 11h.01m3-4h.01m4.99 0h.01m2.99 4h.01"/></symbol>
     <symbol id="icon-in" viewBox="0 0 24 24"><path d="m5 8 4 4-4 4m14-8-4 4 4 4M3 12h6m6 0h6"/></symbol>
+    <symbol id="icon-out" viewBox="0 0 24 24"><path d="m7 8-4 4 4 4m10-8 4 4-4 4M3 12h6m6 0h6"/></symbol>
     <symbol id="icon-up" viewBox="0 0 24 24"><path d="m6 12 6-6 6 6m-6-6v13"/></symbol>
     <symbol id="icon-down" viewBox="0 0 24 24"><path d="m6 12 6 6 6-6m-6 6V5"/></symbol>
     <symbol id="icon-neutral" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
@@ -333,8 +345,7 @@ body{margin:0}
         </select>
       </label>
       <div class="top-actions" data-el="topActions" hidden>
-        <button type="button" data-nav="home" data-el="homeButton" hidden><svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>Home</button>
-        <button type="button" data-action="connect"><svg class="icon" aria-hidden="true"><use href="#icon-disconnect"/></svg>Disconnect app</button>
+        <button type="button" data-action="connect" aria-label="Disconnect app"><svg class="icon" aria-hidden="true"><use href="#icon-disconnect"/></svg><span>Disconnect<span class="disconnect-suffix"> app</span></span></button>
       </div>
     </div>
   </header>
@@ -441,7 +452,7 @@ body{margin:0}
           <section class="movement-group" aria-labelledby="hand-heading">
             <h2 id="hand-heading">Hand</h2>
             <div class="menu hand-presets">
-              <button type="button" class="secondary" data-action="openHand" data-motion><svg class="icon" aria-hidden="true"><use href="#icon-hand"/></svg>Open hand</button>
+              <button type="button" class="secondary" data-action="openHand" data-motion><svg class="icon" aria-hidden="true"><use href="#icon-out"/></svg>Open hand</button>
               <button type="button" class="secondary" data-action="closeHand" data-motion><svg class="icon" aria-hidden="true"><use href="#icon-in"/></svg>Close hand</button>
             </div>
             <p class="muted" data-el="handPosition"></p>
@@ -461,6 +472,9 @@ body{margin:0}
 
       <div class="screen-reader" role="status" data-el="announce"></div>
     </main>
+    <nav class="home-nav" aria-label="Return home" data-el="homeNav" hidden>
+      <button type="button" data-nav="home"><svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>Home</button>
+    </nav>
   </div>
   <section class="safety" aria-label="Stop controls" data-el="safety" hidden>
     <div class="safety-inner">
@@ -603,7 +617,7 @@ body{margin:0}
     const handPosition = fingersOpen === thumbOut ? state.finger : fingersOpen ? 'Fingers open' : 'Fingers closed';
     for(const section of all('[data-page]')) section.hidden = section.dataset.page !== state.page;
     el.topActions.hidden = !state.connected;
-    el.homeButton.hidden = state.page === 'home';
+    el.homeNav.hidden = !state.connected || state.page === 'home';
     el.safety.hidden = !state.connected;
     root.dataset.theme = state.theme;
     el.theme.value = state.theme;
