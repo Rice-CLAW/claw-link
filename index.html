@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>CLAW Link · Demo</title>
 <style>
-:root{font-family:system-ui,sans-serif;scroll-padding-bottom:11rem}
+:root{font-family:system-ui,sans-serif;scroll-padding-top:4.5rem;scroll-padding-bottom:11rem}
 body{margin:0}
 
 #claw-ui{
@@ -114,13 +114,12 @@ body{margin:0}
 }
 #claw-ui button.primary:not(:disabled):hover{background:color-mix(in srgb,var(--primary-color) 91%,var(--primary-ink))}
 
-#claw-ui .top{background:var(--main-color);border-bottom:1px solid var(--line)}
+#claw-ui .top{position:sticky;top:0;z-index:2;background:var(--main-color);border-bottom:1px solid var(--line)}
 #claw-ui .top-inner,#claw-ui .shell,#claw-ui .safety-inner{width:100%;max-width:var(--app-width);margin-inline:auto}
 #claw-ui .top-inner{
-  display:flex;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
   align-items:center;
-  justify-content:space-between;
-  flex-wrap:wrap;
   gap:8px 12px;
   padding:max(10px,env(safe-area-inset-top)) var(--gutter-right) 10px var(--gutter-left);
 }
@@ -141,9 +140,17 @@ body{margin:0}
 #claw-ui .menu .primary{min-height:52px}
 #claw-ui .menu .secondary{background:var(--soft)}
 #claw-ui .menu button.secondary:not(:disabled):hover{background:color-mix(in srgb,var(--soft) 88%,var(--ink))}
-#claw-ui .top-actions{display:flex;gap:6px;flex-wrap:wrap}
-#claw-ui .theme-option{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-#claw-ui .theme-option select{margin-inline-start:auto}
+#claw-ui .top-actions{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+#claw-ui .theme-option{display:flex;align-items:center;gap:6px;justify-self:end}
+#claw-ui .theme-option select{
+  appearance:none;
+  padding-inline:10px 29px;
+  font-size:16px;
+  background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
+  background-position:right 16px center,right 11px center;
+  background-size:5px 5px;
+  background-repeat:no-repeat;
+}
 #claw-ui .movement-group{display:grid;gap:8px}
 #claw-ui .hand-presets{grid-template-columns:repeat(2,minmax(0,1fr))}
 #claw-ui .hand-presets button{padding-inline:6px}
@@ -245,7 +252,13 @@ body{margin:0}
   #claw-ui .training-actions button{padding-inline:5px;font-size:13px}
   #claw-ui .top-inner,#claw-ui .top-actions{column-gap:4px}
   #claw-ui .top-actions button{padding-inline:5px;font-size:12px}
+  #claw-ui .theme-option .theme-label{display:none}
   #claw-ui .motion-actions{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+}
+@media(max-width:619px){
+  :root{scroll-padding-top:7.5rem}
+  #claw-ui .top-inner{grid-template-columns:minmax(0,1fr) auto}
+  #claw-ui .top-actions{grid-column:1/-1}
 }
 @media(max-width:440px){
   #claw-ui .brand{flex-direction:column;gap:0}
@@ -310,6 +323,15 @@ body{margin:0}
   <header class="top">
     <div class="top-inner">
       <div class="brand"><span class="wordmark">CLAW Link</span><span class="demo">Demo</span></div>
+      <label class="theme-option"><svg class="icon" aria-hidden="true"><use href="#icon-theme"/></svg><span class="theme-label">Theme</span>
+        <select data-el="theme" aria-label="Theme">
+          <option value="default">Default</option>
+          <option value="web">Spider-Verse</option>
+          <option value="night">Midnight</option>
+          <option value="fireflower">Fireflower</option>
+          <option value="blossoms">Blossoms</option>
+        </select>
+      </label>
       <div class="top-actions" data-el="topActions" hidden>
         <button type="button" data-nav="home" data-el="homeButton" hidden><svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>Home</button>
         <button type="button" data-action="connect"><svg class="icon" aria-hidden="true"><use href="#icon-disconnect"/></svg>Disconnect app</button>
@@ -325,15 +347,6 @@ body{margin:0}
           <div class="menu">
             <button type="button" class="primary" data-action="connect"><svg class="icon" aria-hidden="true"><use href="#icon-plug"/></svg>Connect demo device</button>
           </div>
-          <label class="theme-option"><svg class="icon" aria-hidden="true"><use href="#icon-theme"/></svg>Theme
-            <select data-theme-select>
-              <option value="default">Default</option>
-              <option value="web">Spider-Verse</option>
-              <option value="night">Midnight</option>
-              <option value="fireflower">Fireflower</option>
-              <option value="blossoms">Blossoms</option>
-            </select>
-          </label>
         </div>
       </section>
 
@@ -350,15 +363,6 @@ body{margin:0}
         <div class="heading"><h1>More</h1></div>
         <div class="menu">
           <button type="button" data-nav="status"><svg class="icon" aria-hidden="true"><use href="#icon-status"/></svg>Device status</button>
-          <label class="theme-option"><svg class="icon" aria-hidden="true"><use href="#icon-theme"/></svg>Theme
-            <select data-theme-select>
-              <option value="default">Default</option>
-              <option value="web">Spider-Verse</option>
-              <option value="night">Midnight</option>
-              <option value="fireflower">Fireflower</option>
-              <option value="blossoms">Blossoms</option>
-            </select>
-          </label>
         </div>
       </section>
 
@@ -479,7 +483,6 @@ body{margin:0}
   const root = document.getElementById('claw-ui');
   const all = (selector) => [...root.querySelectorAll(selector)];
   const el = Object.fromEntries(all('[data-el]').map(item => [item.dataset.el,item]));
-  const themeSelectors = all('[data-theme-select]');
   const directions = {
     wristUp: {label:'Wrist up', motor:'Wrist', position:'wrist', value:'Extended'},
     wristDown: {label:'Wrist down', motor:'Wrist', position:'wrist', value:'Flexed'},
@@ -603,7 +606,7 @@ body{margin:0}
     el.homeButton.hidden = state.page === 'home';
     el.safety.hidden = !state.connected;
     root.dataset.theme = state.theme;
-    for(const select of themeSelectors) select.value = state.theme;
+    el.theme.value = state.theme;
     set('pose',handPosition);
     set('wristHome','Wrist ' + state.wrist.toLowerCase());
     set('thumbHome',state.thumb);
@@ -717,13 +720,11 @@ body{margin:0}
     const nextFocus = {stop:el.resume,resume:el.stop,physical:el.resetPhysical,resetPhysical:el.physical,cancel:el.trainCount};
     if(data.action in nextFocus && !nextFocus[data.action].disabled) nextFocus[data.action].focus();
   });
-  for(const select of themeSelectors){
-    select.addEventListener('change', () => {
-      state.theme = select.value;
-      try { localStorage.setItem('claw-link-theme',state.theme); } catch {}
-      render();
-    });
-  }
+  el.theme.addEventListener('change', () => {
+    state.theme = el.theme.value;
+    try { localStorage.setItem('claw-link-theme',state.theme); } catch {}
+    render();
+  });
   el.advancedDirections.addEventListener('change',render);
   el.trainCount.addEventListener('input',() => el.trainCount.setCustomValidity(''));
 
@@ -794,7 +795,7 @@ body{margin:0}
   }
   try {
     const savedTheme = localStorage.getItem('claw-link-theme');
-    if([...themeSelectors[0].options].some(option=>option.value===savedTheme)) state.theme = savedTheme;
+    if([...el.theme.options].some(option=>option.value===savedTheme)) state.theme = savedTheme;
   } catch {}
   new ResizeObserver(() => {if(state.page === 'status') drawHand();}).observe(el.hand);
   document.addEventListener('visibilitychange',render);
